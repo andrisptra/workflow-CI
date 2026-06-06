@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  CSV_URL: "MLProject/asap2_preprocessing/train_prerpocessed.csv"
+  CSV_URL: "MLproject/asap2_preprocessing/train_prerpocessed.csv"
   TARGET_VAR: "score_label"
 
 jobs:
@@ -46,14 +46,14 @@ jobs:
       # ---------------------------------
       - name: Install Dependencies
         run: |
-          pip install -r MLProject/requirements.txt
+          pip install -r MLproject/requirements.txt
 
       # ---------------------------------
       # 5. Run Mlflow Project
       # ---------------------------------
       - name: Run MLflow Project
         run: |
-          mlflow run MLProject --env-manager=local
+          mlflow run MLproject --env-manager=local
 
       # ---------------------------------
       # 6. get latet mlflow run id
