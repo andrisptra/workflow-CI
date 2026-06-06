@@ -88,20 +88,19 @@ def train_mode(name, pipeline, X_train, X_test, y_train, y_test):
     print(f"Training model: {name}")
     mlflow.sklearn.autolog()
 
-    with mlflow.start_run(run_name=name):
-        pipeline.fit(X_train, y_train)
-        y_pred = pipeline.predict(X_test)
+    pipeline.fit(X_train, y_train)
+    y_pred = pipeline.predict(X_test)
 
-        acc = accuracy_score(y_test, y_pred)
-        f1 = f1_score(y_test, y_pred, average="weighted")
-        class_report = classification_report(y_test, y_pred)
-        precision_score_ = precision_score(y_test, y_pred, average="weighted")
-        recall_score_ = recall_score(y_test, y_pred, average="weighted")
+    acc = accuracy_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred, average="weighted")
+    class_report = classification_report(y_test, y_pred)
+    precision_score_ = precision_score(y_test, y_pred, average="weighted")
+    recall_score_ = recall_score(y_test, y_pred, average="weighted")
 
-        print(f"Accuracy: {acc:.4f} | F1 Score: {f1:.4f}")
-        print(f"Precision: {precision_score_:.4f} | Recall: {recall_score_:.4f}")
-        print("Classification Report:")
-        print(class_report)
+    print(f"Accuracy: {acc:.4f} | F1 Score: {f1:.4f}")
+    print(f"Precision: {precision_score_:.4f} | Recall: {recall_score_:.4f}")
+    print("Classification Report:")
+    print(class_report)
 
     print(f"Finished training {name}\n")
 
