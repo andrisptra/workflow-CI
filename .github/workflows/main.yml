@@ -83,6 +83,9 @@ jobs:
       # ---------------------------------
       - name: Upload Model to LFS
         run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
           git add .
           git commit -m "Add model from run"
           git push origin main
