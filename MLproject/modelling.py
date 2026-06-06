@@ -11,6 +11,7 @@ pastikan sudah menjalankan perintah berikut untuk memulai MLflow server:
 """
 
 import warnings
+import os
 
 import mlflow
 import mlflow.sklearn
@@ -37,13 +38,12 @@ TRAIN_PATH = "asap2_preprocessing/train_preprocessed.csv"
 TEST_PATH = "asap2_preprocessing/test_preprocessed.csv"
 EXPERIMENT_NAME = "ASAP2_Essay_Score_Classification"
 RANDOM_STATE = 42
+TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5000")
 
 # ---------------------------------------------------
 # Setup MLflow
 # ---------------------------------------------------
-mlflow.set_tracking_uri(
-    "http://localhost:5000"
-)  # Pastikan MLflow server berjalan di localhost:5000
+mlflow.set_tracking_uri(TRACKING_URI)
 mlflow.set_experiment(EXPERIMENT_NAME)
 
 
