@@ -7,8 +7,12 @@ on:
     branches: [main]
 
 env:
-  CSV_URL: "MLproject/asap2_preprocessing/train_prerpocessed.csv"
+  CSV_URL: "MLproject/asap2_preprocessing/train_preprocessed.csv"
   TARGET_VAR: "score_label"
+  DAGSHUB_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
+  DAGSHUB_REPO_NAME: ${{ secrets.DAGSHUB_REPO_NAME }}
+  MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
+  MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_ACCESS_TOKEN }}
 
 jobs:
   train-and-deploy:
@@ -62,12 +66,13 @@ jobs:
           mlflow run MLproject --env-manager=local
 
       # ---------------------------------
-      # 6. get latet mlflow run id
+      # 6. get mlflow run id from script output
       # ---------------------------------
       - name: Get Latest MLflow Run ID
         id: get_run_id
         run: |
-          RUN_ID=$(ls -td mlruns/*/* | head -1 | cut -d/ -f3)
+          RUN_ID=$(cat MLproject/run_id.txt)
+          test -n "$RUN_ID"
           echo "run_id=$RUN_ID" >> $GITHUB_ENV
           echo "Latest MLflow Run ID: $RUN_ID"
 
@@ -82,9 +87,6 @@ jobs:
       # 9. Upload to LFS
       # ---------------------------------
       - name: Upload Model to LFS
-        env:
-          DAGSHUB_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
-          DAGSHUB_REPO_NAME: ${{ secrets.DAGSHUB_REPO_NAME }}
         run: |
           run_id=${{ env.run_id }}
           mlflow artifacts download --run-id $run_id -d model_artifacts
@@ -101,7 +103,7 @@ jobs:
       # ---------------------------------
       - name: Build Docker Model
         run: |
-          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "essayScore"
+          mlflow models build-docker --model-uri "runs:/${{ env.run_id }}/model" --name "essayScore"
 
       # ---------------------------------
       # 11. Log in to Docker Hub

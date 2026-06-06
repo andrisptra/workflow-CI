@@ -285,6 +285,8 @@ def train_and_tune(name, config, X_train, X_test, y_train, y_test):
 
         run_id = mlflow.active_run().info.run_id
         print(f"  MLflow Run ID: {run_id}")
+        with open("run_id.txt", "w") as f:
+            f.write(run_id)
 
     return {
         "model": name,
