@@ -66,7 +66,7 @@ jobs:
       - name: Get Latest MLflow Run ID
         id: get_run_id
         run: |
-          RUN_ID=$(cat MLproject/run_id.txt)
+          RUN_ID=$(cat "$GITHUB_WORKSPACE/run_id.txt")
           test -n "$RUN_ID"
           echo "run_id=$RUN_ID" >> $GITHUB_ENV
           echo "Latest MLflow Run ID: $RUN_ID"

@@ -114,4 +114,11 @@ if __name__ == "__main__":
     for name, pipeline in MODELS.items():
         train_mode(name, pipeline, X_train, X_test, y_train, y_test)
 
+    active_run = mlflow.active_run()
+    if active_run is not None:
+        run_id = active_run.info.run_id
+        workspace_root = os.getenv("GITHUB_WORKSPACE", ".")
+        with open(os.path.join(workspace_root, "run_id.txt"), "w") as f:
+            f.write(run_id)
+
     print("All models trained and logged to MLflow!")
