@@ -22,6 +22,7 @@ Usage:
 """
 
 import json
+import argparse
 import os
 import warnings
 
@@ -52,15 +53,20 @@ warnings.filterwarnings("ignore")
 # ---------------------------------------------------
 # CONFIG
 # ---------------------------------------------------
-DAGSHUB_USERNAME = os.getenv("DAGSHUB_USERNAME", "apq000d6y0649")
-DAGSHUB_REPO_NAME = os.getenv("DAGSHUB_REPO_NAME", "ASAP2_Essay_Score")
+DEFAULT_DAGSHUB_USERNAME = os.getenv("DAGSHUB_USERNAME", "apq000d6y0649")
+DEFAULT_DAGSHUB_REPO_NAME = os.getenv("DAGSHUB_REPO_NAME", "ASAP2_Essay_Score")
+DEFAULT_TRAIN_PATH = "asap2_preprocessing/train_preprocessed.csv"
+DEFAULT_TEST_PATH = "asap2_preprocessing/test_preprocessed.csv"
 
-DAGSHUB_TRACKING_URI = (
-    f"https://dagshub.com/{DAGSHUB_USERNAME}/{DAGSHUB_REPO_NAME}.mlflow"
+DAGSHUB_USERNAME = DEFAULT_DAGSHUB_USERNAME
+DAGSHUB_REPO_NAME = DEFAULT_DAGSHUB_REPO_NAME
+DAGSHUB_TRACKING_URI = os.getenv(
+    "MLFLOW_TRACKING_URI",
+    f"https://dagshub.com/{DAGSHUB_USERNAME}/{DAGSHUB_REPO_NAME}.mlflow",
 )
 
-TRAIN_PATH = "asap2_preprocessing/train_preprocessed.csv"
-TEST_PATH = "asap2_preprocessing/test_preprocessed.csv"
+TRAIN_PATH = DEFAULT_TRAIN_PATH
+TEST_PATH = DEFAULT_TEST_PATH
 EXPERIMENT_NAME = "ASAP2_Essay_Score_Tuning"
 RANDOM_STATE = 42
 ARTIFACTS_DIR = "artifacts"
@@ -74,6 +80,15 @@ def setup_mlflow():
     mlflow.set_tracking_uri(DAGSHUB_TRACKING_URI)
     mlflow.set_experiment(EXPERIMENT_NAME)
     print(f"MLflow tracking URI set to: {DAGSHUB_TRACKING_URI}")
+
+
+def parse_runtime_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--train_path", default=DEFAULT_TRAIN_PATH)
+    parser.add_argument("--test_path", default=DEFAULT_TEST_PATH)
+    parser.add_argument("--dagshub_username", default=DEFAULT_DAGSHUB_USERNAME)
+    parser.add_argument("--dagshub_repo_name", default=DEFAULT_DAGSHUB_REPO_NAME)
+    return parser.parse_args()
 
 
 # ---------------------------------------------------
@@ -301,6 +316,15 @@ def train_and_tune(name, config, X_train, X_test, y_train, y_test):
 # Main Execution
 # ---------------------------------------------------
 if __name__ == "__main__":
+    args = parse_runtime_args()
+    TRAIN_PATH = args.train_path
+    TEST_PATH = args.test_path
+    DAGSHUB_USERNAME = args.dagshub_username
+    DAGSHUB_REPO_NAME = args.dagshub_repo_name
+    DAGSHUB_TRACKING_URI = os.getenv(
+        "MLFLOW_TRACKING_URI",
+        f"https://dagshub.com/{DAGSHUB_USERNAME}/{DAGSHUB_REPO_NAME}.mlflow",
+    )
     setup_mlflow()
     X_train, X_test, y_train, y_test = load_data(TRAIN_PATH, TEST_PATH)
 
