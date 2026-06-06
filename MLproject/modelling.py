@@ -10,8 +10,8 @@ pastikan sudah menjalankan perintah berikut untuk memulai MLflow server:
     mlflow ui --host
 """
 
-import warnings
 import os
+import warnings
 
 import mlflow
 import mlflow.sklearn
@@ -111,14 +111,13 @@ def train_mode(name, pipeline, X_train, X_test, y_train, y_test):
 if __name__ == "__main__":
     X_train, y_train, X_test, y_test = load_data(TRAIN_PATH, TEST_PATH)
 
-    for name, pipeline in MODELS.items():
-        train_mode(name, pipeline, X_train, X_test, y_train, y_test)
+    train_mode(
+        "GradientBoostingClassifier",
+        MODELS["GradientBoostingClassifier"],
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+    )
 
-    active_run = mlflow.active_run()
-    if active_run is not None:
-        run_id = active_run.info.run_id
-        workspace_root = os.getenv("GITHUB_WORKSPACE", ".")
-        with open(os.path.join(workspace_root, "run_id.txt"), "w") as f:
-            f.write(run_id)
-
-    print("All models trained and logged to MLflow!")
+    print("Models trained and logged to MLflow!")
