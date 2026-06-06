@@ -47,6 +47,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r MLproject/requirements.txt
+          pip install seaborn
 
       # ---------------------------------
       # 5. Run Mlflow Project
