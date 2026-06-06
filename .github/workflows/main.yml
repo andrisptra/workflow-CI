@@ -32,6 +32,21 @@ jobs:
       - name: pull LFS files
         run: git lfs pull
 
+      - name: Validate DagsHub Secrets
+        run: |
+          if [ -z "$DAGSHUB_USERNAME" ]; then
+            echo "DAGSHUB_USERNAME is missing"
+            exit 1
+          fi
+          if [ -z "$DAGSHUB_REPO_NAME" ]; then
+            echo "DAGSHUB_REPO_NAME is missing"
+            exit 1
+          fi
+          if [ -z "$MLFLOW_TRACKING_PASSWORD" ]; then
+            echo "MLFLOW_TRACKING_PASSWORD is missing"
+            exit 1
+          fi
+
       # ---------------------------------
       # set up Python 3.12.7
       # ---------------------------------
