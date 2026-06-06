@@ -7,7 +7,6 @@ on:
 env:
   CSV_URL: "MLproject/asap2_preprocessing/train_preprocessed.csv"
   TARGET_VAR: "score_label"
-  
 
 jobs:
   train-and-deploy:
@@ -58,8 +57,7 @@ jobs:
       # ---------------------------------
       - name: Run MLflow Project
         run: |
-          set -o pipefail
-          mlflow run MLproject --env-manager=local 2>&1 | tee "$RUNNER_TEMP/mlflow_run.log"
+          mlflow run MLproject --env-manager=local
 
       # ---------------------------------
       # 6. get mlflow run id from mlflow output
@@ -67,8 +65,7 @@ jobs:
       - name: Get Latest MLflow Run ID
         id: get_run_id
         run: |
-          RUN_ID=$(grep -oE "run with ID '[^']+'" "$RUNNER_TEMP/mlflow_run.log" | tail -1 | sed -E "s/.*'([^']+)'.*/\1/")
-          test -n "$RUN_ID"
+          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
           echo "run_id=$RUN_ID" >> $GITHUB_ENV
           echo "Latest MLflow Run ID: $RUN_ID"
 
@@ -84,13 +81,9 @@ jobs:
       # ---------------------------------
       - name: Upload Model to LFS
         run: |
-          run_id=${{ env.run_id }}
-          mlflow artifacts download --run-id $run_id -d model_artifacts
-          cd model_artifacts
-          git lfs install
-          git init
-          git remote add origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/${{ secrets.DAGSHUB_REPO_NAME }}.git
-          git add .
-          git commit -m "Add model artifacts from run $run_id"
-          git push origin main --force
-
+          MODEL_PATH="mlruns/0/${{ env.run_id }}/artifacts/model"
+          git lfs track "model_${{ env.run_id }}.pkl"
+          cp $MODEL_PATH model_${{ env.run_id }}.pkl
+          git add model_${{ env.run_id }}.pkl
+          git commit -m "Add model from run ${{ env.run_id }}"
+          git push origin main
