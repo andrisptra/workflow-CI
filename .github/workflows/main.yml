@@ -23,6 +23,11 @@ jobs:
       # ---------------------------------
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: pull LFS files
+        run: git lfs pull
 
       # ---------------------------------
       # set up Python 3.12.7
