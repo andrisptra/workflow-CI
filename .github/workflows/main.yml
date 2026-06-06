@@ -84,5 +84,5 @@ jobs:
       - name: Upload Model to LFS
         run: |
           git add .
-          git commit -m "Add model from run
+          git commit -m "Add model from run"
           git push origin main
