@@ -58,15 +58,16 @@ jobs:
       # ---------------------------------
       - name: Run MLflow Project
         run: |
-          mlflow run MLproject --env-manager=local
+          set -o pipefail
+          mlflow run MLproject --env-manager=local | tee "$RUNNER_TEMP/mlflow_run.log"
 
       # ---------------------------------
-      # 6. get mlflow run id from script output
+      # 6. get mlflow run id from mlflow output
       # ---------------------------------
       - name: Get Latest MLflow Run ID
         id: get_run_id
         run: |
-          RUN_ID=$(cat "$GITHUB_WORKSPACE/run_id.txt")
+          RUN_ID=$(grep -oE "run with ID '[^']+'" "$RUNNER_TEMP/mlflow_run.log" | tail -1 | sed -E "s/.*'([^']+)'.*/\1/")
           test -n "$RUN_ID"
           echo "run_id=$RUN_ID" >> $GITHUB_ENV
           echo "Latest MLflow Run ID: $RUN_ID"
