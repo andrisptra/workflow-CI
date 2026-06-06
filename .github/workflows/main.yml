@@ -59,7 +59,7 @@ jobs:
       - name: Run MLflow Project
         run: |
           set -o pipefail
-          mlflow run MLproject --env-manager=local | tee "$RUNNER_TEMP/mlflow_run.log"
+          mlflow run MLproject --env-manager=local 2>&1 | tee "$RUNNER_TEMP/mlflow_run.log"
 
       # ---------------------------------
       # 6. get mlflow run id from mlflow output
