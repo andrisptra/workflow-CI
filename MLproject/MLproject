@@ -5,6 +5,6 @@ conda_env: conda.yaml
 entry_points:
   main:
     parameters:
-      data_path: {type: str, default: "data/processed/processed_data.csv"}
-      model_path: {type: str, default: "models/model.pkl"}
-    command: "python src/train.py --data_path {data_path} --model_path {model_path}"
+      data_path: {type: str, default: "asap2_preprocessing/train_preprocessed.csv"}
+      model_path: {type: str, default: "model.pkl"}
+    command: "python modelling.py --data_path {data_path} --model_path {model_path}"
