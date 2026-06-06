@@ -1,10 +1,21 @@
 name: submission-MSML
 
-conda_env: conda.yaml
+python_env: conda.yaml
 
 entry_points:
   main:
     parameters:
-      data_path: {type: str, default: "asap2_preprocessing/train_preprocessed.csv"}
-      model_path: {type: str, default: "model.pkl"}
+      train_path:
+        type: str
+        default: "asap2_preprocessing/train_preprocessed.csv"
+      test_path:
+        type: str
+        default: "asap2_preprocessing/test_preprocessed.csv"
+
+      dagshub_username:
+        type: str
+        default: "andrisptra"
+      dagshub_repo_name:
+        type: str
+        default: "ASAP2_Essay_Score"
     command: "python modelling.py --train_path {train_path} --test_path {test_path} --dagshub_username {dagshub_username} --dagshub_repo_name {dagshub_repo_name}"
