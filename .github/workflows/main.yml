@@ -53,7 +53,7 @@ jobs:
       # ---------------------------------
       - name: Run MLflow Project
         run: |
-          mlflow run MLproject --env-manager=local
+          mlflow run MLProject --env-manager=local
 
       # ---------------------------------
       # 6. get latet mlflow run id
