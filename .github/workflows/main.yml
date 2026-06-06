@@ -3,8 +3,6 @@ name: Train and Deploy Model
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 env:
   CSV_URL: "MLproject/asap2_preprocessing/train_preprocessed.csv"
