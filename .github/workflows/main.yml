@@ -25,7 +25,9 @@ jobs:
           lfs: true
 
       - name: pull LFS files
-        run: git lfs pull
+        run: |
+          git lfs pull
+          git lfs track "*.pkl"
 
       # ---------------------------------
       # set up Python 3.12.7
@@ -81,9 +83,6 @@ jobs:
       # ---------------------------------
       - name: Upload Model to LFS
         run: |
-          MODEL_PATH="mlruns/0/${{ env.run_id }}/artifacts/model"
-          git lfs track "model_${{ env.run_id }}.pkl"
-          cp $MODEL_PATH model_${{ env.run_id }}.pkl
-          git add model_${{ env.run_id }}.pkl
-          git commit -m "Add model from run ${{ env.run_id }}"
+          git add .
+          git commit -m "Add model from run
           git push origin main
