@@ -7,4 +7,4 @@ entry_points:
     parameters:
       data_path: {type: str, default: "asap2_preprocessing/train_preprocessed.csv"}
       model_path: {type: str, default: "model.pkl"}
-    command: "python modelling.py --data_path {data_path} --model_path {model_path}"
+    command: "python modelling.py --train_path {train_path} --test_path {test_path} --dagshub_username {dagshub_username} --dagshub_repo_name {dagshub_repo_name}"
