@@ -52,13 +52,13 @@ ARTIFACTS_DIR = "artifacts"
 os.makedirs(ARTIFACTS_DIR, exist_ok=True)
 
 
-# ---------------------------------------------------
-# Setup MLflow -> DagsHub Remote Tracking
-# ---------------------------------------------------
-def setup_mlflow():
-    mlflow.set_tracking_uri("sqlite:///mlflow.db")  # Local SQLite for simplicity
-    mlflow.set_experiment(EXPERIMENT_NAME)
-    print(f"MLflow tracking URI set to{mlflow.get_tracking_uri()}")
+# # ---------------------------------------------------
+# # Setup MLflow -> DagsHub Remote Tracking
+# # ---------------------------------------------------
+# def setup_mlflow():
+#     mlflow.set_tracking_uri("sqlite:///mlflow.db")  # Local SQLite for simplicity
+#     mlflow.set_experiment(EXPERIMENT_NAME)
+#     print(f"MLflow tracking URI set to{mlflow.get_tracking_uri()}")
 
 
 # ---------------------------------------------------
@@ -222,7 +222,7 @@ def train_and_tune(name, config, X_train, y_train, X_test, y_test):
     fi_path = save_feature_importance(best_model, name)
 
     # Log to MLflow
-    with mlflow.start_run(run_name=f"{name}_Tuned"):
+    with mlflow.start_run():
         # log Hyperparameter
         mlflow.log_params({"model": name, "cv_folds": 3, "scoring": "f1_weighted"})
         for k, v in best_params.items():
@@ -296,7 +296,6 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    setup_mlflow()
     X_train, y_train, X_test, y_test = load_data(args.train_path, args.test_path)
 
     results = []
