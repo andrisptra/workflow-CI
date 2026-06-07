@@ -8,7 +8,7 @@ env:
   CSV_URL: "MLproject/asap2_preprocessing/train_preprocessed.csv"
   TARGET_VAR: "score_label"
   MLFLOW_ALLOW_FILE_STORE: "true"
-  MLFLOW_TRACKING_URI: "sqlite:///mlflow.db"
+  MLFLOW_TRACKING_URI: "sqlite:///${{ github.workspace }}/mlflow.db"
 
 jobs:
   train-and-deploy:
@@ -79,7 +79,7 @@ jobs:
           # 1. Ambil Run ID dari Python
           OUTPUT_ID=$(python -c "
           import mlflow
-          mlflow.set_tracking_uri('sqlite:///mlflow.db')
+          mlflow.set_tracking_uri('sqlite:///${{ github.workspace }}/mlflow.db')
           client = mlflow.tracking.MlflowClient()
           exp = client.get_experiment_by_name('ASAP2_Essay_Score_Tuning')
           runs = client.search_runs(exp.experiment_id, order_by=['start_time DESC'], max_results=1)
@@ -105,7 +105,9 @@ jobs:
           git config --local user.name "github-actions[bot]"
 
           git add .
+          git diff --cached --quiet || \
           git commit -m "Add model from run"
+
           git push origin main
 
       # ---------------------------------
