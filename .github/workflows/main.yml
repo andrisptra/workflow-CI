@@ -68,7 +68,7 @@ jobs:
       # ---------------------------------
       - name: Run MLflow Project
         run: |
-          mlflow run MLproject --env-manager=local
+          mlflow run MLproject --env-manager=local --experiment-name="ASAP2_Essay_Score_Tuning"
 
       # ---------------------------------
       # 6. get mlflow run id from mlflow output
