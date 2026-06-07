@@ -7,8 +7,8 @@ entry_points:
     parameters:
         train_path:
             type: str
-            default: "asap2preprocessing/train_preprocessed.csv"
+            default: "asap2_preprocessing/train_preprocessed.csv"
         test_path:
             type: str
-            default: "asap2preprocessing/test_preprocessed.csv"
+            default: "asap2_preprocessing/test_preprocessed.csv"
     command: "python modelling.py --train_path {train_path} --test_path {test_path}"
