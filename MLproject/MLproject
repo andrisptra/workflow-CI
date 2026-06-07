@@ -11,4 +11,4 @@ entry_points:
         test_path:
             type: str
             default: "asap2preprocessing/test_preprocessed.csv"
-    command: "python modelling.py"
+    command: "python modelling.py --train_path {train_path} --test_path {test_path}"
