@@ -8,6 +8,7 @@ env:
   CSV_URL: "MLproject/asap2_preprocessing/train_preprocessed.csv"
   TARGET_VAR: "score_label"
   MLFLOW_ALLOW_FILE_STORE: "true"
+  MLFLOW_TRACKING_URI: "sqlite:///mlflow.db"
 
 jobs:
   train-and-deploy:

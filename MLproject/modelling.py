@@ -222,7 +222,7 @@ def train_and_tune(name, config, X_train, X_test, y_train, y_test):
     fi_path = save_feature_importance(best_model, name)
 
     # Log to MLflow
-    with mlflow.start_run(run_name=f"{name}_Tuned"):
+    with mlflow.start_run(run_name=f"{name}_Tuned", nested=True):
         # log Hyperparameter
         mlflow.log_params({"model": name, "cv_folds": 3, "scoring": "f1_weighted"})
         for k, v in best_params.items():
