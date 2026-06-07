@@ -51,14 +51,17 @@ RANDOM_STATE = 42
 ARTIFACTS_DIR = "artifacts"
 os.makedirs(ARTIFACTS_DIR, exist_ok=True)
 
-
 # # ---------------------------------------------------
 # # Setup MLflow -> DagsHub Remote Tracking
 # # ---------------------------------------------------
 # def setup_mlflow():
-#     mlflow.set_tracking_uri("sqlite:///mlflow.db")  # Local SQLite for simplicity
-#     mlflow.set_experiment(EXPERIMENT_NAME)
-#     print(f"MLflow tracking URI set to{mlflow.get_tracking_uri()}")
+mlflow.set_tracking_uri("sqlite:///mlflow.db")  # Local SQLite for simplicity
+mlflow.set_experiment(EXPERIMENT_NAME)
+print(f"MLflow tracking URI set to{mlflow.get_tracking_uri()}")
+
+print("cwd =", os.getcwd())
+print("tracking =", mlflow.get_tracking_uri())
+print("run_id =", os.getenv("MLFLOW_RUN_ID"))
 
 
 # ---------------------------------------------------
@@ -220,6 +223,12 @@ def train_and_tune(name, config, X_train, y_train, X_test, y_test):
     cm_path = save_confussion_matrix(y_test, y_pred, name)
     report_path = save_classification_report(y_test, y_pred, name)
     fi_path = save_feature_importance(best_model, name)
+
+    print("=" * 50)
+    print("Tracking URI:", mlflow.get_tracking_uri())
+    print("Active Run:", mlflow.active_run())
+    print("MLFLOW_RUN_ID:", os.environ.get("MLFLOW_RUN_ID"))
+    print("=" * 50)
 
     # Log to MLflow
     with mlflow.start_run():

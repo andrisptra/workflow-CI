@@ -58,6 +58,11 @@ jobs:
           pip install seaborn
           pip install scikit-optimize
 
+      - name: Debug MLflow
+        run: |
+          pwd
+          ls -la
+          echo $MLFLOW_TRACKING_URI
       # ---------------------------------
       # 5. Run Mlflow Project
       # ---------------------------------
