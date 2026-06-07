@@ -181,7 +181,7 @@ MODEL_CONFIGS = {
 # ---------------------------------------------------
 
 
-def train_and_tune(name, config, X_train, X_test, y_train, y_test):
+def train_and_tune(name, config, X_train, y_train, X_test, y_test):
     print(f"\n{'=' * 50}")
     print(f"Training and tuning model: {name}")
     print(f"{'=' * 50}\n")
@@ -297,7 +297,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     setup_mlflow()
-    X_train, X_test, y_train, y_test = load_data(args.train_path, args.test_path)
+    X_train, y_train, X_test, y_test = load_data(args.train_path, args.test_path)
 
     results = []
     for name, config in MODEL_CONFIGS.items():
