@@ -71,7 +71,8 @@ jobs:
       - name: Get Latest MLflow Run ID
         id: get_run_id
         run: |
-          RUN_ID=$(python -c "
+          # 1. Ambil Run ID dari Python
+          OUTPUT_ID=$(python -c "
           import mlflow
           mlflow.set_tracking_uri('sqlite:///mlflow.db')
           client = mlflow.tracking.MlflowClient()
@@ -79,6 +80,9 @@ jobs:
           runs = client.search_runs(exp.experiment_id, order_by=['start_time DESC'], max_results=1)
           print(runs[0].info.run_id)
           ")
+
+          # 2. Daftarkan ke environment global GitHub Actions agar bisa dibaca step lain
+          echo "MLFLOW_RUN_ID=$OUTPUT_ID" >> $GITHUB_ENV
 
       # ---------------------------------
       # 8. install python dependencies
@@ -104,7 +108,7 @@ jobs:
       # ---------------------------------
       - name: Build Docker Image
         run: |
-          mlflow models build-docker --model-uri "runs:/${{ env.run_id }}/model" -n essay-scoring-model
+          mlflow models build-docker --model-uri "runs:/${{ env.MLFLOW_RUN_ID }}/model" -n essay-scoring-model
 
       # ---------------------------------
       # 11. login to Docker Hub
