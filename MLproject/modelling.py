@@ -58,7 +58,7 @@ os.makedirs(ARTIFACTS_DIR, exist_ok=True)
 def setup_mlflow():
     mlflow.set_tracking_uri("sqlitemlflow.dblow")  # Local SQLite for simplicity
     mlflow.set_experiment(EXPERIMENT_NAME)
-    print(f"MLflow tracking URI set to:{mlflow.get_tracking_uri()}")
+    print(f"MLflow tracking URI set to{mlflow.get_tracking_uri()}")
 
 
 # ---------------------------------------------------
@@ -297,7 +297,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     setup_mlflow()
-    X_train, y_train, X_test, y_test = load_data(args.train_path, args.test_path)
+    X_train, X_test, y_train, y_test = load_data(args.train_path, args.test_path)
 
     results = []
     for name, config in MODEL_CONFIGS.items():
