@@ -69,9 +69,14 @@ jobs:
       - name: Get Latest MLflow Run ID
         id: get_run_id
         run: |
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
-          echo "run_id=$RUN_ID" >> $GITHUB_ENV
-          echo "Latest MLflow Run ID: $RUN_ID"
+          RUN_ID=$(python -c "
+          import mlflow
+          mlflow.set_tracking_uri('sqlite:///mlflow.db')
+          client = mlflow.tracking.MlflowClient()
+          exp = client.get_experiment_by_name('ASAP2_Essay_Score_Tuning')
+          runs = client.search_runs(exp.experiment_id, order_by=['start_time DESC'], max_results=1)
+          print(runs[0].info.run_id)
+          ")
 
       # ---------------------------------
       # 8. install python dependencies
@@ -97,7 +102,7 @@ jobs:
       # ---------------------------------
       - name: Build Docker Image
         run: |
-          mlflow models build-docker -model-uri "runs:/$RUN_ID/model" -n essay-scoring-model
+          mlflow models build-docker --model-uri "runs:/${{ env.run_id }}/model" -n essay-scoring-model
 
       # ---------------------------------
       # 11. login to Docker Hub
