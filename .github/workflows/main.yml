@@ -54,6 +54,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install mlflow
           pip install seaborn
+          pip install scikit-optimize
 
       # ---------------------------------
       # 5. Run Mlflow Project
