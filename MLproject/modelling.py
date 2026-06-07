@@ -301,7 +301,7 @@ if __name__ == "__main__":
 
     results = []
     for name, config in MODEL_CONFIGS.items():
-        result = train_and_tune(name, config, X_train, X_test, y_train, y_test)
+        result = train_and_tune(name, config, X_train, y_train, X_test, y_test)
         results.append(result)
 
     # Summary
