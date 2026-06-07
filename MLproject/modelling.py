@@ -56,7 +56,7 @@ os.makedirs(ARTIFACTS_DIR, exist_ok=True)
 # Setup MLflow -> DagsHub Remote Tracking
 # ---------------------------------------------------
 def setup_mlflow():
-    mlflow.set_tracking_uri("sqlite://mlflow.db")  # Local SQLite for simplicity
+    mlflow.set_tracking_uri("mlruns")  # Local SQLite for simplicity
     mlflow.set_experiment(EXPERIMENT_NAME)
     print(f"MLflow tracking URI set to: {mlflow.get_tracking_uri()}")
 
